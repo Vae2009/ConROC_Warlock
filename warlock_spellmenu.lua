@@ -109,31 +109,7 @@ function ConROC:SpellmenuClass()
 		activeTexture = ConROC.Textures.Caster,
 		disabledTexture = ConROC.Textures.Caster_disabled,
 		role = "ConROC_SM_Role_Caster",
-		},--[[
-		{
-		frameName = "Melee",
-		activeTexture = ConROC.Textures.Melee,
-		disabledTexture = ConROC.Textures.Melee_disabled,
-		role = "ConROC_SM_Role_Melee",
 		},
-		{
-		frameName = "Healer",
-		activeTexture = ConROC.Textures.Healer,
-		disabledTexture = ConROC.Textures.Healer_disabled,
-		role = "ConROC_SM_Role_Healer",
-		},
-		{
-		frameName = "Tank",
-		activeTexture = ConROC.Textures.Tank,
-		disabledTexture = ConROC.Textures.Tank_disabled,
-		role = "ConROC_SM_Role_Tank",
-		},
-		{
-		frameName = "Ranged",
-		activeTexture = ConROC.Textures.Ranged,
-		disabledTexture = ConROC.Textures.Ranged_disabled,
-		role = "ConROC_SM_Role_Ranged",
-		},--]]
 		{
 		frameName = "PvP",
 		activeTexture = ConROC.Textures.PvP,
@@ -844,7 +820,7 @@ function ConROC:SpellMenuUpdate(newSpell)
                         oItem:SetPoint("TOPLEFT", lFrame, "BOTTOMLEFT", 0, 0);
                     end
                     if type(_spellData.spellID) == "number" then
-                        if plvl >= _spellData.reqLevel and IsSpellKnown(_spellData.spellID) then
+                        if plvl >= _spellData.reqLevel and (IsSpellKnown(_spellData.spellID) or IsSpellKnownOrOverridesKnown(_spellData.spellID)) then
                             lFrame = oItem;
                             lFrame:Show();
                             if oItem:IsShown() then
@@ -962,7 +938,7 @@ function ConROC:SpellMenuUpdate(newSpell)
                     else
                         oItem:SetPoint("TOPLEFT", lFrame, "BOTTOMLEFT", 0, 0);
                     end
-                    if plvl >= _spellData.reqLevel and IsSpellKnown(_spellData.spellID) then                                                    
+                    if plvl >= _spellData.reqLevel and (IsSpellKnown(_spellData.spellID) or IsSpellKnownOrOverridesKnown(_spellData.spellID)) then
                         lFrame = oItem;
                         lFrame:Show();
                             if oItem:IsShown() then

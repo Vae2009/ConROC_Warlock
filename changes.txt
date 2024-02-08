@@ -1,43 +1,48 @@
+Ver 1.15.1
+    -Rune added: Haunt, Lake of Fire, Metamorphosis, Chaos Bolt, Demonic Grace, Incinerate, Master Channeler, Soul Siphon
+    -Affliction and Destruction rotations supported.
+    -Talents and spec check reworked due to error for client languages
+Ver 1.15.0
+    -Version no updated to sync with SoD
+    -Support for Classic SOD
+    -Started to add support for translations.
 Ver 2.0.2
-	-Support for Classic
-	-Started to add support for translations.
-Ver 2.0.2
-	-Re-worked the talent section, now populated by a function
-	-Changed the role section in the spellmenu to new icons
+    -Re-worked the talent section, now populated by a function
+    -Changed the role section in the spellmenu to new icons
 
 Ver 2.0.1
-	-Re-worked the code for the spellmenu
-	-Updated the wand support
+    -Re-worked the code for the spellmenu
+    -Updated the wand support
 
 Ver 1.13.8
-	-Updated to WotLK spells and talents
-	-Added support for not showing all spellranks
-	-Added AoE option
-	-Made Spellmenu into a scrolling area.
+    -Updated to WotLK spells and talents
+    -Added support for not showing all spellranks
+    -Added AoE option
+    -Made Spellmenu into a scrolling area.
 
 Ver 1.13.7
-	-Added new spell ranks.
+    -Added new spell ranks.
 
 Ver 1.13.6
-	-Tweaked wand use.
+    -Tweaked wand use.
 
 Ver 1.13.5
-	-Adding Demonic Sacrifice coding.
+    -Adding Demonic Sacrifice coding.
 
 Ver 1.13.4
-	-Overhauled Rotation.
-	-Added Spellmenu.
-	
+    -Overhauled Rotation.
+    -Added Spellmenu.
+    
 Ver 1.13.3
-	-Minor update.
+    -Minor update.
 
 Ver 1.13.2
-	-Added Wand support.
-	-Moved Demon Armor to RaidBuff.
+    -Added Wand support.
+    -Moved Demon Armor to RaidBuff.
 
 Ver 1.13.1
-	-Added pet coding.
-	-Tweaked Immolate to know when your casting.
-	
+    -Added pet coding.
+    -Tweaked Immolate to know when your casting.
+    
 Ver 1.13.0
-	-Initial release for Classic WoW.
+    -Initial release for Classic WoW.

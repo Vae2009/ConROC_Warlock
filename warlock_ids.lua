@@ -101,7 +101,26 @@ local optionMaxIds = ...;
 		SiphonLifeRank2 = 18879,
 		SiphonLifeRank3 = 18880,
 		SiphonLifeRank4 = 18881,
-	}		
+	}
+	ids.Affliction_Talent = { 
+		FelConcentration =  1, 
+		Nightfall =  2, 
+		ImprovedCorruption =  3, 
+		ImprovedDrainLife =  4, 
+		Suppression =  5, 
+		ImprovedCurseofWeakness =  6, 
+		ImprovedLifeTap =  7, 
+		GrimReach =  8, 
+		DarkPact =  9, 
+		SiphonLife =  10, 
+		ShadowMastery =  11, 
+		AmplifyCurse =  12, 
+		CurseofExhaustion =  13, 
+		ImprovedCurseofExhaustion =  14, 
+		ImprovedDrainSoul =  15, 
+		ImprovedDrainMana =  16, 
+		ImprovedCurseofAgony =  17, 
+	}
 --Demonology
 	ids.Demo_Ability = {
 		BanishRank1 = 710,
@@ -181,6 +200,25 @@ local optionMaxIds = ...;
 		
 		UnendingBreath = 5697,
 	}
+	ids.Demonology_Talent = { 
+		ImprovedHealthstone =  1, 
+		ImprovedImp =  2, 
+		DemonicEmbrace =  3, 
+		ImprovedHealthFunnel =  4, 
+		ImprovedVoidwalker =  5, 
+		FelDomination =  6, 
+		MasterSummoner =  7, 
+		FelStamina =  8, 
+		FelIntellect =  9, 
+		ImprovedSayaad =  10, 
+		MasterDemonologist =  11, 
+		ImprovedFirestone =  12, 
+		UnholyPower =  13, 
+		ImprovedSpellstone =  14, 
+		DemonicSacrifice =  15, 
+		SoulLink =  16, 
+		ImprovedSubjugateDemon =  17, 
+	}
 --Destruction
 	ids.Dest_Ability = {
 		ConflagrateRank1 = 17962,
@@ -234,12 +272,40 @@ local optionMaxIds = ...;
 		SoulFireRank1 = 6353,
 		SoulFireRank2 = 17924,
 	}
+	ids.Destruction_Talent = { 
+		Cataclysm =  1, 
+		Bane =  2, 
+		ImprovedShadowBolt =  3, 
+		ImprovedImmolate =  4, 
+		Shadowburn =  5, 
+		DestructiveReach =  6, 
+		ImprovedSearingPain =  7, 
+		Emberstorm =  8, 
+		Ruin =  9, 
+		Conflagrate =  10, 
+		Devastation =  11, 
+		Aftermath =  12, 
+		ImprovedFirebolt =  13, 
+		ImprovedLashofPain =  14, 
+		Intensity =  15, 
+		Pyroclasm =  16, 
+	}
 	ids.Runes = {
-		Haunt = 403501,
+		Haunt = 403501, -- also player buff ID
+		LakeofFire = 403666,
+		Metamorphosis = 403789, -- also player buff ID
+		ChaosBolt = 403629, 
+		DemonicGrace = 425463, -- also player buff ID
+		Incinerate = 412758, -- also player buff ID
+		MasterChanneler = 403668,
+		SoulSiphon = 403685, -- also player buff ID
+		Invocation = 426243, --Phase 2 -passive -Refreshing Corruption, Immolate, Curse of Agony, or Siphon Life when it has less than 6 seconds duration remaining will cause you to deal instant damage to the target equal to the spell's remaining periodic damage.
+		DanceoftheWicked = 412798, --Phase 2 -passive -You and your demon pet gain dodge chance equal to your spell critical strike chance each time you deal a critical strike to an enemy, and also both regain 2% of maximum mana.
 	}
 --Pet
 	ids.Pet = {
-
+		SpellLockRank1 = 19244,
+		SpellLockRank2 = 19647,
 	}
 -- Auras
 	ids.Player_Buff = {
@@ -261,6 +327,7 @@ local optionMaxIds = ...;
 
 	}
 	ids.Target_Debuff = {
+		LakeofFire = 403650,
 	
 	}
 	ids.optionMaxIds = {

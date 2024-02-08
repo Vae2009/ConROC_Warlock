@@ -11,7 +11,9 @@ ConROC.Warlock = {};
 
 local ConROC_Warlock, ids = ...;
 local optionMaxIds = ...;
-local currentSpecName
+local currentSpecName;
+local currentSpecID;
+
 function ConROC:EnableDefenseModule()
 	self.NextDef = ConROC.Warlock.Defense;
 end
@@ -26,37 +28,27 @@ function ConROC:PopulateTalentIDs()
     local numTabs = GetNumTalentTabs()
     
     for tabIndex = 1, numTabs do
-        local tabName = GetTalentTabInfo(tabIndex) .. "_Talent"
-        tabName = string.gsub(tabName, "%s", "") -- Remove spaces from tab name
-        if printTalentsMode then
-        	print(tabName..": ")
-        else
-        	ids[tabName] = {}
-    	end
-        
+        local tabName = GetTalentTabInfo(tabIndex)
+        tabName = string.gsub(tabName, "[^%w]", "") .. "_Talent" -- Remove spaces from tab name
+        print("ids."..tabName.." = {")
         local numTalents = GetNumTalents(tabIndex)
 
         for talentIndex = 1, numTalents do
             local name, _, _, _, _ = GetTalentInfo(tabIndex, talentIndex)
 
             if name then
-                local talentID = string.gsub(name, "%s", "") -- Remove spaces from talent name
-                if printTalentsMode then
-                	print(talentID .." = ID no: ", talentIndex)
-                else
-                	ids[tabName][talentID] = talentIndex
-                end
+                local talentID = string.gsub(name, "[^%w]", "") -- Remove spaces from talent name
+                    print(talentID .." = ", talentIndex ..",")
             end
         end
+        print("}")
     end
-    if printTalentsMode then printTalentsMode = false end
 end
-ConROC:PopulateTalentIDs()
 
 local Racial, Spec, Caster, Aff_Ability, Aff_Talent, Demo_Ability, Demo_Talent, Dest_Ability, Dest_Talent, Pet, Player_Buff, Player_Debuff, Target_Debuff = ids.Racial, ids.Spec, ids.Caster, ids.Aff_Ability, ids.Affliction_Talent, ids.Demo_Ability, ids.Demonology_Talent, ids.Dest_Ability, ids.Destruction_Talent, ids.Pet, ids.Player_Buff, ids.Player_Debuff, ids.Target_Debuff;
-
 function ConROC:SpecUpdate()
 	currentSpecName = ConROC:currentSpec()
+    currentSpecID = ConROC:currentSpec("ID")
 
 	if currentSpecName then
 	   ConROC:Print(self.Colors.Info .. "Current spec:", self.Colors.Success ..  currentSpecName)
@@ -115,6 +107,17 @@ local _ShadowBolt = Dest_Ability.ShadowBoltRank1;
 local _ShadowBoltRank1 = Dest_Ability.ShadowBoltRank1;
 local _Shadowburn = Dest_Ability.ShadowburnRank1;
 local _SoulFire = Dest_Ability.SoulFireRank1;
+--Runes
+local _Haunt = ids.Runes.Haunt;
+local _LakeofFire = ids.Runes.LakeofFire;
+local _Metamorphosis = ids.Runes.Metamorphosis;
+local _ChaosBolt = ids.Runes.ChaosBolt;
+local _DemonicGrace = ids.Runes.DemonicGrace;
+local _Incinerate = ids.Runes.Incinerate;
+local _MasterChanneler = ids.Runes.MasterChanneler;
+local _SoulSiphon = ids.Runes.SoulSiphon;
+--Pet
+local _SpellLock = ids.Pet.SpellLockRank1
 
 function ConROC:UpdateSpellID()
 --Ranks
@@ -270,7 +273,10 @@ elseif IsSpellKnown(Dest_Ability.ShadowburnRank3) then _Shadowburn = Dest_Abilit
 elseif IsSpellKnown(Dest_Ability.ShadowburnRank2) then _Shadowburn = Dest_Ability.ShadowburnRank2; end
 
 if IsSpellKnown(Dest_Ability.SoulFireRank2) then _SoulFire = Dest_Ability.SoulFireRank2; end
-	
+
+--Pet
+if IsSpellKnown(ids.Pet.SpellLockRank2) then _SpellLock = ids.Pet.SpellLockRank2; end
+
 ids.optionMaxIds = {
 	--Affliction
     AmplifyCurse = _AmplifyCurse,
@@ -315,6 +321,15 @@ ids.optionMaxIds = {
 	ShadowBoltRank1 = _ShadowBoltRank1,
 	Shadowburn = _Shadowburn,
 	SoulFire = _SoulFire,
+    --Runed
+    Haunt = _Haunt,
+    LakeofFire = _LakeofFire,
+    Metamorphosis = _Metamorphosis,
+    ChaosBolt = _ChaosBolt,
+    DemonicGrace = _DemonicGrace,
+    Incinerate = _Incinerate,
+    MasterChanneler = _MasterChanneler,
+    SoulSiphon = _SoulSiphon,
 }
 end
 ConROC:UpdateSpellID()
@@ -353,7 +368,8 @@ ConROC:UpdateSpellID()
     --]]
 --Abilities
 	local dLifeRDY											= ConROC:AbilityReady(_DrainLife, timeShift);
-	local ampCurseRDY										= ConROC:AbilityReady(_AmplifyCurse, timeShift);
+	   local dLifeDEBUFF                                       = ConROC:TargetDebuff(_DrainLife, timeShift);
+    local ampCurseRDY										= ConROC:AbilityReady(_AmplifyCurse, timeShift);
 	local corrRDY											= ConROC:AbilityReady(_Corruption, timeShift);
 		local corrDEBUFF										= ConROC:TargetDebuff(_Corruption);
 	local cofaRDY											= ConROC:AbilityReady(_CurseofAgony, timeShift);
@@ -419,15 +435,27 @@ ConROC:UpdateSpellID()
         tofs                                                    = ConROC:Buff(Player_Buff.TouchofShadow);   
         fs                                                      = ConROC:Buff(Player_Buff.FelStamina);
     }
-
+    --Runed
+    local HauntRDY                                          = ConROC:AbilityReady(_Haunt, timeShift);
+        local HauntDEBUFF                                       = ConROC:TargetDebuff(_Haunt, timeShift);
+    local LakeofFireDEBUFF                                      = ConROC:TargetDebuff(_LakeofFire, timeShift);
+    local MetamorphosisRDY                                  = ConROC:AbilityReady(_Metamorphosis, timeShift);
+    local ChaosBoltRDY                                      = ConROC:AbilityReady(_ChaosBolt, timeShift);
+    local DemonicGraceRDY                                   = ConROC:AbilityReady(_DemonicGrace, timeShift);
+    local IncinerateRDY                                     = ConROC:AbilityReady(_Incinerate, timeShift);
+        local IncinerateBUFF, IncinerateDUR                     = ConROC:BuffName(_Incinerate, timeShift);
+    local MasterChannelerRDY                                = ConROC:AbilityReady(_MasterChanneler, timeShift);
+    local SoulSiphonRDY                                     = ConROC:AbilityReady(_SoulSiphon, timeShift);
+    --Pet
+    local sLockRDY                                          = ConROC:AbilityReady(_SpellLock, timeShift);
 --Conditions		
 	local summoned 											= ConROC:CallPet();
 	local assist 											= ConROC:PetAssist();
 	local moving 											= ConROC:PlayerSpeed();
 	local incombat 											= UnitAffectingCombat('player');
 	local inmelee											= CheckInteractDistance("target", 3);
-	local targetPh 											= ConROC:PercentHealth('target');	
-	local playerPh 											= ConROC:PercentHealth('player');	
+	local targetPh 											= ConROC:PercentHealth('target');
+	local playerPh 											= ConROC:PercentHealth('player');
 	local hasWand											= HasWandEquipped();
 	local tarHasMana 										= UnitPower('target', Enum.PowerType.Mana);
 
@@ -442,6 +470,8 @@ ConROC:UpdateSpellID()
 --Indicators
 	ConROC:AbilityBurst(_SoulFire, sfireRDY);
 	ConROC:AbilityBurst(_AmplifyCurse, ampCurseRDY and (ConROC:CheckBox(ConROC_SM_Curse_Weakness) or ConROC:CheckBox(ConROC_SM_Curse_Agony)));
+    
+    ConROC:AbilityInterrupt(_SpellLock, ConROC:Interrupt() and sLockRDY)
 
 --Warnings
 	if not assist and summoned and incombat then
@@ -470,107 +500,267 @@ ConROC:UpdateSpellID()
 	end
 
 	--spells
-	if lTapRDY and manaPercent < 20 and playerPh >= 30 then
-		return _LifeTap;
-	end
+    if ConROC.Seasons.IsSoD then --DPS rotation for SoD
 
-	if dManaRDY and tarHasMana > 0 and manaPercent < 20 then
-		return _DrainMana;
-	end
-	if dLifeRDY and playerPh <= 30 then
-		return _DrainLife;
-	end
-	if sBoltRDY and sTranceBUFF then
-        return _ShadowBolt;
-    end
-    
-    if confRDY and immoDEBUFF then
-        return _Conflagrate;
-    end
-    
-    if sburnRDY and ((ConROC:Raidmob() and targetPh <= 5) or (not ConROC:Raidmob() and targetPh <= 20)) then
-        return _Shadowburn;
-    end
-    
-    if dSoulRDY and ConROC:SoulShards() < ConROC_SM_Option_SoulShard:GetNumber() and ((ConROC:Raidmob() and targetPh <= 5) or (not ConROC:Raidmob() and targetPh <= 20)) then --Soul Shard counter needed.
-        return _DrainSoul;
-    end
-    
-    if dManaRDY and tarHasMana > 0 and manaPercent < 20 then
-        return _DrainMana;
-    end
-    
-    if lTapRDY and manaPercent < 20 and playerPh >= 30 then
-        return _LifeTap;
-    end
+        if lTapRDY and ((manaPercent < 20 and playerPh >= 30) or (moving and manaPercent < 60 and not sburnRDY) ) then
+            return _LifeTap;
+        end
 
-    if ConROC_AoEButton:IsVisible() and hfireRDY and inMelee and playerPh >= 30 then
-        return _Hellfire;
-    end
-    
-    if ConROC_AoEButton:IsVisible() and roffireRDY then
-        return _RainofFire;
-    end
-    
-    if ConROC:CheckBox(ConROC_SM_Debuff_Corruption) and corrRDY and not corrDEBUFF and currentSpell ~= _Corruption and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then
-        return _Corruption;
-    end 
+        if (currentSpecID == ids.Spec.Affliction) then
+            if not incombat and IncinerateRDY and not IncinerateBUFF then
+                return _Incinerate
+            end
+            if sBoltRDY and sTranceBUFF then
+                return _ShadowBolt;
+            end
+            if HauntRDY and not HauntDEBUFF then
+                return _Haunt;
+            end
+            if ConROC:CheckBox(ConROC_SM_Debuff_Corruption) and corrRDY and not corrDEBUFF and currentSpell ~= _Corruption and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then
+                return _Corruption;
+            end
+            if dLifeRDY and IsSpellKnownOrOverridesKnown(_MasterChanneler) and not dLifeDEBUFF then
+                return _DrainLife
+            end
+            if ConROC:CheckBox(ConROC_SM_Debuff_Immolate) and immoRDY and not immoDEBUFF then --and IsSpellKnownOrOverridesKnown() then
+                return _Immolate
+            end
+            if ConROC:CheckBox(ConROC_SM_Curse_Recklessness) and cofrRDY and not cofrDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
+                return _CurseofRecklessness;
+            end
+            if ConROC:CheckBox(ConROC_SM_Curse_Agony) and cofaRDY and not cofaDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
+                return _CurseofAgony;
+            end
+            if IncinerateRDY then
+                return _Incinerate
+            end
+            return nil
+        end
+        --[[
+        if (currentSpecID == ids.Spec.Demonology) then
+        end
+        ]]
+        if (currentSpecID == ids.Spec.Destruction) then
+            if not incombat and IncinerateRDY and not IncinerateBUFF then
+                return _Incinerate
+            end
+            if sburnRDY and (moving or ((targetPh <= 5 and ConROC:Raidmob()) or (targetPh <= 20 and not ConROC:Raidmob()))) then
+                return _Shadowburn
+            end
+            if IsSpellKnownOrOverridesKnown(_LakeofFire) and roffireRDY and not LakeofFireDEBUFF then
+                return _RainofFire;
+            end
+            if ChaosBoltRDY then
+                return _ChaosBolt;
+            end
+            if ConROC:CheckBox(ConROC_SM_Debuff_Immolate) and immoRDY and not immoDEBUFF then
+                return _Immolate
+            end
 
-    --Curses
-    if ConROC:CheckBox(ConROC_SM_Curse_Weakness) and cofwRDY and not cofwDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
-        return _CurseofWeakness;
-    end
-    
-    if ConROC:CheckBox(ConROC_SM_Curse_Agony) and cofaRDY and not cofaDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
-        return _CurseofAgony;
-    end
+            --Curses
+            if ConROC:CheckBox(ConROC_SM_Curse_Weakness) and cofwRDY and not cofwDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
+                return _CurseofWeakness;
+            end
+            
+            if ConROC:CheckBox(ConROC_SM_Curse_Agony) and cofaRDY and not cofaDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
+                return _CurseofAgony;
+            end
 
-    if ConROC:CheckBox(ConROC_SM_Curse_Recklessness) and cofrRDY and not cofrDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
-        return _CurseofRecklessness;
-    end
+            if ConROC:CheckBox(ConROC_SM_Curse_Recklessness) and cofrRDY and not cofrDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
+                return _CurseofRecklessness;
+            end
 
-    if ConROC:CheckBox(ConROC_SM_Curse_Tongues) and coftRDY and not coftDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
-        return _CurseofTongues;
-    end
+            if ConROC:CheckBox(ConROC_SM_Curse_Tongues) and coftRDY and not coftDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
+                return _CurseofTongues;
+            end
 
-    if ConROC:CheckBox(ConROC_SM_Curse_Exhaustion) and cofeRDY and not cofeDEBUFF then 
-        return Aff_Ability.CurseofExhaustion;
-    end
+            if ConROC:CheckBox(ConROC_SM_Curse_Exhaustion) and cofeRDY and not cofeDEBUFF then 
+                return Aff_Ability.CurseofExhaustion;
+            end
 
-    if ConROC:CheckBox(ConROC_SM_Curse_Elements) and cofteRDY and not cofteDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
-        return _CurseoftheElements;
-    end
+            if ConROC:CheckBox(ConROC_SM_Curse_Elements) and cofteRDY and not cofteDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
+                return _CurseoftheElements;
+            end
 
-    if ConROC:CheckBox(ConROC_SM_Curse_Shadow) and cofsRDY and not cofsDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
-        return _CurseofShadow;
-    end
+            if ConROC:CheckBox(ConROC_SM_Curse_Shadow) and cofsRDY and not cofsDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
+                return _CurseofShadow;
+            end
 
-    if ConROC:CheckBox(ConROC_SM_Curse_Doom) and cofdRDY and not cofdDEBUFF and ((ConROC:Raidmob() and targetPh >= 75) or (not ConROC:Raidmob() and targetPh == 100)) then 
-        return Aff_Ability.CurseofDoom;
-    end 
-    --
-    
-    if ConROC:CheckBox(ConROC_SM_Debuff_SiphonLife) and slifeRDY and not slifeDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then
-        return _SiphonLife;
-    end     
-    
-    if ConROC:CheckBox(ConROC_SM_Debuff_Immolate) and immoRDY and not immoDEBUFF and currentSpell ~= _Immolate and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then
-        return _Immolate;
-    end
+            if ConROC:CheckBox(ConROC_SM_Curse_Doom) and cofdRDY and not cofdDEBUFF and ((ConROC:Raidmob() and targetPh >= 75) or (not ConROC:Raidmob() and targetPh == 100)) then 
+                return Aff_Ability.CurseofDoom;
+            end
+            if IncinerateRDY then
+                return _Incinerate
+            end
+            return nil
+        end
 
-    if ConROC:CheckBox(ConROC_SM_Option_UseWand) and hasWand and (manaPercent <= 20 or targetPh <= 5) then
-        return Caster.Shoot;
-    end 
-    
-    if ConROC:CheckBox(ConROC_SM_Spell_ShadowBolt) and sBoltRDY then
-        return _ShadowBolt;
-    end
-    
-    if ConROC:CheckBox(ConROC_SM_Spell_SearingPain) and sPainRDY then
-        return _SearingPain;
-    end
+        if dManaRDY and tarHasMana > 0 and manaPercent < 20 then
+            return _DrainMana;
+        end
+        if dLifeRDY and playerPh <= 30 then
+            return _DrainLife;
+        end
+        if sBoltRDY and sTranceBUFF then
+            return _ShadowBolt;
+        end
+        if HauntRDY and not HauntDEBUFF then
+            return _Haunt;
+        end
+        if lastSpellId == _Incinerate and immoRDY and not immoDEBUFF then
+            return _Immolate
+        end
+        if dLifeRDY and IsSpellKnownOrOverridesKnown(_MasterChanneler) and not dLifeDEBUFF then
+            return _DrainLife
+        end
+        if ConROC:CheckBox(ConROC_SM_Debuff_Corruption) and corrRDY and not corrDEBUFF and currentSpell ~= _Corruption and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then
+            return _Corruption;
+        end 
 
-    return nil;
+        --Curses
+        if ConROC:CheckBox(ConROC_SM_Curse_Weakness) and cofwRDY and not cofwDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
+            return _CurseofWeakness;
+        end
+        
+        if ConROC:CheckBox(ConROC_SM_Curse_Agony) and cofaRDY and not cofaDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
+            return _CurseofAgony;
+        end
+
+        if ConROC:CheckBox(ConROC_SM_Curse_Recklessness) and cofrRDY and not cofrDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
+            return _CurseofRecklessness;
+        end
+
+        if ConROC:CheckBox(ConROC_SM_Curse_Tongues) and coftRDY and not coftDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
+            return _CurseofTongues;
+        end
+
+        if ConROC:CheckBox(ConROC_SM_Curse_Exhaustion) and cofeRDY and not cofeDEBUFF then 
+            return Aff_Ability.CurseofExhaustion;
+        end
+
+        if ConROC:CheckBox(ConROC_SM_Curse_Elements) and cofteRDY and not cofteDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
+            return _CurseoftheElements;
+        end
+
+        if ConROC:CheckBox(ConROC_SM_Curse_Shadow) and cofsRDY and not cofsDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
+            return _CurseofShadow;
+        end
+
+        if ConROC:CheckBox(ConROC_SM_Curse_Doom) and cofdRDY and not cofdDEBUFF and ((ConROC:Raidmob() and targetPh >= 75) or (not ConROC:Raidmob() and targetPh == 100)) then 
+            return Aff_Ability.CurseofDoom;
+        end
+        if IncinerateRDY and not IncinerateBUFF then
+            return _Incinerate
+        end
+        if ConROC:CheckBox(ConROC_SM_Debuff_Immolate) and immoRDY and not immoDEBUFF then --and IsSpellKnownOrOverridesKnown() then
+            return _Immolate
+        end
+        if ConROC:CheckBox(ConROC_SM_Spell_ShadowBolt) and sBoltRDY then
+            return _ShadowBolt;
+        end
+    else --not SoD
+    	if lTapRDY and manaPercent < 20 and playerPh >= 30 then
+    		return _LifeTap;
+    	end
+
+    	if dManaRDY and tarHasMana > 0 and manaPercent < 20 then
+    		return _DrainMana;
+    	end
+    	if dLifeRDY and playerPh <= 30 then
+    		return _DrainLife;
+    	end
+    	if sBoltRDY and sTranceBUFF then
+            return _ShadowBolt;
+        end
+        
+        if confRDY and immoDEBUFF then
+            return _Conflagrate;
+        end
+        
+        if sburnRDY and ((ConROC:Raidmob() and targetPh <= 5) or (not ConROC:Raidmob() and targetPh <= 20)) then
+            return _Shadowburn;
+        end
+        
+        if dSoulRDY and ConROC:SoulShards() < ConROC_SM_Option_SoulShard:GetNumber() and ((ConROC:Raidmob() and targetPh <= 5) or (not ConROC:Raidmob() and targetPh <= 20)) then --Soul Shard counter needed.
+            return _DrainSoul;
+        end
+        
+        if dManaRDY and tarHasMana > 0 and manaPercent < 20 then
+            return _DrainMana;
+        end
+        
+        if lTapRDY and manaPercent < 20 and playerPh >= 30 then
+            return _LifeTap;
+        end
+
+        if ConROC_AoEButton:IsVisible() and hfireRDY and inMelee and playerPh >= 30 then
+            return _Hellfire;
+        end
+        
+        if ConROC_AoEButton:IsVisible() and roffireRDY then
+            return _RainofFire;
+        end
+        
+        if ConROC:CheckBox(ConROC_SM_Debuff_Corruption) and corrRDY and not corrDEBUFF and currentSpell ~= _Corruption and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then
+            return _Corruption;
+        end 
+
+        --Curses
+        if ConROC:CheckBox(ConROC_SM_Curse_Weakness) and cofwRDY and not cofwDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
+            return _CurseofWeakness;
+        end
+        
+        if ConROC:CheckBox(ConROC_SM_Curse_Agony) and cofaRDY and not cofaDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
+            return _CurseofAgony;
+        end
+
+        if ConROC:CheckBox(ConROC_SM_Curse_Recklessness) and cofrRDY and not cofrDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
+            return _CurseofRecklessness;
+        end
+
+        if ConROC:CheckBox(ConROC_SM_Curse_Tongues) and coftRDY and not coftDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
+            return _CurseofTongues;
+        end
+
+        if ConROC:CheckBox(ConROC_SM_Curse_Exhaustion) and cofeRDY and not cofeDEBUFF then 
+            return Aff_Ability.CurseofExhaustion;
+        end
+
+        if ConROC:CheckBox(ConROC_SM_Curse_Elements) and cofteRDY and not cofteDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
+            return _CurseoftheElements;
+        end
+
+        if ConROC:CheckBox(ConROC_SM_Curse_Shadow) and cofsRDY and not cofsDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then 
+            return _CurseofShadow;
+        end
+
+        if ConROC:CheckBox(ConROC_SM_Curse_Doom) and cofdRDY and not cofdDEBUFF and ((ConROC:Raidmob() and targetPh >= 75) or (not ConROC:Raidmob() and targetPh == 100)) then 
+            return Aff_Ability.CurseofDoom;
+        end 
+        --
+        
+        if ConROC:CheckBox(ConROC_SM_Debuff_SiphonLife) and slifeRDY and not slifeDEBUFF and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then
+            return _SiphonLife;
+        end     
+        
+        if ConROC:CheckBox(ConROC_SM_Debuff_Immolate) and immoRDY and not immoDEBUFF and currentSpell ~= _Immolate and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then
+            return _Immolate;
+        end
+
+        if ConROC:CheckBox(ConROC_SM_Option_UseWand) and hasWand and (manaPercent <= 20 or targetPh <= 5) then
+            return Caster.Shoot;
+        end 
+        
+        if ConROC:CheckBox(ConROC_SM_Spell_ShadowBolt) and sBoltRDY then
+            return _ShadowBolt;
+        end
+        
+        if ConROC:CheckBox(ConROC_SM_Spell_SearingPain) and sPainRDY then
+            return _SearingPain;
+        end
+
+        return nil;
+    end
 --[[
     if IsEquippedItem(40432) and not UnitAffectingCombat("player") and iothCount <=9 and playerPh >= 30 and ConROC:CheckBox(ConROC_SM_Option_PrePull) and ConROC:TarHostile() and ConROC:IsGlyphActive(63320) then
 		return _LifeTapRank1
@@ -578,7 +768,7 @@ ConROC:UpdateSpellID()
 		return _LifeTapRank1;
 	end
 
-	if (currentSpecName == "Affliction") then
+	if (currentSpecID == ids.Spec.Affliction) then
 		if sBoltRDY and not UnitAffectingCombat("player") then
 			return _ShadowBoltRank1
 		end
@@ -684,7 +874,7 @@ ConROC:UpdateSpellID()
 		if ConROC:CheckBox(ConROC_SM_Debuff_Corruption) and corrRDY and not corrDEBUFF and currentSpell ~= _Corruption and ((ConROC:Raidmob() and targetPh >= 5) or (not ConROC:Raidmob() and targetPh >= 20)) then
 			return _Corruption;
 		end
-	elseif (currentSpecName == "Demonology") then
+	elseif (currentSpecID == ids.Spec.Demonology) then
 		if ConROC:CheckBox(ConROC_SM_Curse_Doom) and cofdRDY and not cofdDEBUFF and ((ConROC:Raidmob() and targetPh >= 75) or (not ConROC:Raidmob() and targetPh == 100)) then 
 			return _CurseofDoom;
 		end
@@ -704,7 +894,7 @@ ConROC:UpdateSpellID()
 			return _ShadowBolt;
 		end
 
-	elseif (currentSpecName == "Destruction") then
+	elseif (currentSpecID == ids.Spec.Destruction) then
 		if ConROC_AoEButton:IsVisible() then
 			if ConROC:CheckBox(ConROC_SM_AoE_SeedofCorruption) and seedRDY and not seedDEBUFF then
 				return _SeedofCorruption;
