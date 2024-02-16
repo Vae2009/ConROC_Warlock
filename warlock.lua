@@ -453,7 +453,7 @@ ConROC:UpdateSpellID()
 	local assist 											= ConROC:PetAssist();
 	local moving 											= ConROC:PlayerSpeed();
 	local incombat 											= UnitAffectingCombat('player');
-	local inmelee											= CheckInteractDistance("target", 3);
+	local inmelee											= ConROC:IsMeleeRange()--CheckInteractDistance("target", 3);
 	local targetPh 											= ConROC:PercentHealth('target');
 	local playerPh 											= ConROC:PercentHealth('player');
 	local hasWand											= HasWandEquipped();
