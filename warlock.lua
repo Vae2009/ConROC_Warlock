@@ -1,16 +1,15 @@
 ConROC.Warlock = {};
 
 local ConROC_Warlock, ids = ...;
-local currentSpecName;
-local currentSpecID;
 
 function ConROC:EnableRotationModule()
 	self.Description = 'Warlock';
 	self.NextSpell = ConROC.Warlock.Damage;
 
 	self:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED');
-	self:RegisterEvent("PLAYER_TALENT_UPDATE");
 	self.lastSpellId = 0;
+
+	ConROC:SpellmenuClass();
 end
 
 function ConROC:EnableDefenseModule()
@@ -23,27 +22,10 @@ function ConROC:UNIT_SPELLCAST_SUCCEEDED(event, unitID, lineID, spellID)
 	end
 end
 
-function ConROC:SpecUpdate()
-	currentSpecName = ConROC:currentSpec()
-    currentSpecID = ConROC:currentSpec("ID")
-
-	if currentSpecName then
-	   ConROC:Print(self.Colors.Info .. "Current spec:", self.Colors.Success ..  currentSpecName)
-	else
-	   ConROC:Print(self.Colors.Error .. "You do not currently have a spec.")
-	end
-end
-
-ConROC:SpecUpdate()
-
-function ConROC:PLAYER_TALENT_UPDATE()
-	ConROC:SpecUpdate();
-    ConROC:closeSpellmenu();
-end
-
-local Racial, Spec, Caster, Ability, Rank, Aff_Talent, Demo_Talent, Dest_Talent, Pet, Runes, Buff, Debuff = ids.Racial, ids.Spec, ids.Caster, ids.Ability, ids.Rank, ids.Affliction_Talent, ids.Demonology_Talent, ids.Destruction_Talent, ids.Pet, ids.Runes, ids.Buff, ids.Debuff;
+local Racial, Spec, Caster, Ability, Rank, Aff_Talent, Demo_Talent, Dest_Talent, Pet, Engrave, Runes, Buff, Debuff = ids.Racial, ids.Spec, ids.Caster, ids.Ability, ids.Rank, ids.Affliction_Talent, ids.Demonology_Talent, ids.Destruction_Talent, ids.Pet, ids.Engrave, ids.Runes, ids.Buff, ids.Debuff;
 
 --Info
+local _Player_Spec, _Player_Spec_ID = ConROC:currentSpec();
 local _Player_Level = UnitLevel("player");
 local _Player_Percent_Health = ConROC:PercentHealth('player');
 local _is_PvP = ConROC:IsPvP();
@@ -74,6 +56,7 @@ local _EscapeArtist, _EscapeArtist_RDY = _, _;
 local _Perception, _Perception_RDY = _, _;
 
 function ConROC:Stats()
+	_Player_Spec, _Player_Spec_ID = ConROC:currentSpec();
 	_Player_Level = UnitLevel("player");
 	_Player_Percent_Health = ConROC:PercentHealth('player');
 	_is_PvP = ConROC:IsPvP();
@@ -206,7 +189,7 @@ function ConROC.Warlock.Damage(_, timeShift, currentSpell, gcd)
             return _LifeTap;
         end
 
-        if (currentSpecID == ids.Spec.Affliction) then
+        if (_Player_Spec_ID == ids.Spec.Affliction) then
             if not _in_combat and _Incinerate_RDY and not _Incinerate_BUFF then
                 return _Incinerate
             end
@@ -237,10 +220,10 @@ function ConROC.Warlock.Damage(_, timeShift, currentSpell, gcd)
             return nil
         end
         --[[
-        if (currentSpecID == ids.Spec.Demonology) then
+        if (_Player_Spec_ID == ids.Spec.Demonology) then
         end
         ]]
-        if (currentSpecID == ids.Spec.Destruction) then
+        if (_Player_Spec_ID == ids.Spec.Destruction) then
             if not _in_combat and _Incinerate_RDY and not _Incinerate_BUFF then
                 return _Incinerate
             end
@@ -465,7 +448,7 @@ function ConROC.Warlock.Damage(_, timeShift, currentSpell, gcd)
 		return _LifeTapRank1;
 	end
 
-	if (currentSpecID == ids.Spec.Affliction) then
+	if (_Player_Spec_ID == ids.Spec.Affliction) then
 		if _ShadowBolt_RDY and not UnitAffectingCombat("player") then
 			return _ShadowBoltRank1
 		end
@@ -571,7 +554,7 @@ function ConROC.Warlock.Damage(_, timeShift, currentSpell, gcd)
 		if ConROC:CheckBox(ConROC_SM_Debuff_Corruption) and _Corruption_RDY and not _Corruption_DEBUFF and currentSpell ~= _Corruption and ((ConROC:Raidmob() and _Target_Percent_Health >= 5) or (not ConROC:Raidmob() and _Target_Percent_Health >= 20)) then
 			return _Corruption;
 		end
-	elseif (currentSpecID == ids.Spec.Demonology) then
+	elseif (_Player_Spec_ID == ids.Spec.Demonology) then
 		if ConROC:CheckBox(ConROC_SM_Curse_Doom) and _CurseofDoom_RDY and not _CurseofDoom_DEBUFF and ((ConROC:Raidmob() and _Target_Percent_Health >= 75) or (not ConROC:Raidmob() and _Target_Percent_Health == 100)) then 
 			return _CurseofDoom;
 		end
@@ -590,7 +573,7 @@ function ConROC.Warlock.Damage(_, timeShift, currentSpell, gcd)
 		if ConROC:CheckBox(ConROC_SM_Spell_ShadowBolt) and _ShadowBolt_RDY then
 			return _ShadowBolt;
 		end
-	elseif (currentSpecID == ids.Spec.Destruction) then
+	elseif (_Player_Spec_ID == ids.Spec.Destruction) then
 		if ConROC_AoEButton:IsVisible() then
 			if ConROC:CheckBox(ConROC_SM_AoE_SeedofCorruption) and seedRDY and not seedDEBUFF then
 				return _SeedofCorruption;
