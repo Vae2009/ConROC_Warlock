@@ -114,6 +114,12 @@ ids.Rank = {
 	DrainLifeRank4 = 7651,
 	DrainLifeRank5 = 11699,
 	DrainLifeRank6 = 11700,
+	DrainLifeSoDRank1 = 403677,
+	DrainLifeSoDRank2 = 403685,
+	DrainLifeSoDRank3 = 403686,
+	DrainLifeSoDRank4 = 403687,
+	DrainLifeSoDRank5 = 403688,
+	DrainLifeSoDRank6 = 403689,
 	DrainManaRank1 = 5138,
 	DrainManaRank2 = 6226,
 	DrainManaRank3 = 11703,
@@ -282,17 +288,39 @@ ids.Destruction_Talent = {
 	Intensity = 15,
 	Pyroclasm = 16,
 }
+ids.Engrave = {
+	--Head--
+	Backdraft = 7115,
+	--Chest--
+	LakeofFire = 6815,
+	MasterChanneler = 6811,
+	--Waist--
+	Invocation = 7053,
+	--Feet--
+	DanceoftheWicked = 6957,
+	Decimation = 7643,
+	--Hands--
+	Metamorphosis = 6816,
+	ShadowBoltVolley = 6814,
+	--Back--
+	SoulSiphon = 7590,
+}
 ids.Runes = {
-	Haunt = 403501, -- also player buff ID
-	LakeofFire = 403666,
-	Metamorphosis = 403789, -- also player buff ID
-	ChaosBolt = 403629, 
-	DemonicGrace = 425463, -- also player buff ID
-	Incinerate = 412758, -- also player buff ID
-	MasterChanneler = 403668,
-	SoulSiphon = 403685, -- also player buff ID
-	Invocation = 426243, --Phase 2 -passive -Refreshing Corruption, Immolate, Curse of Agony, or Siphon Life when it has less than 6 seconds duration remaining will cause you to deal instant damage to the target equal to the spell's remaining periodic damage.
-	DanceoftheWicked = 412798, --Phase 2 -passive -You and your demon pet gain dodge chance equal to your spell critical strike chance each time you deal a critical strike to an enemy, and also both regain 2% of maximum mana.
+	ChaosBolt = 403629,
+	DemonicGrace = 425463,
+	FelArmor = 403619,
+	Haunt = 403501,
+	ImmolationAura = 427726,
+	Incinerate = 412758,
+	InfernalArmor = 440882,
+	Metamorphosis = 403789,
+		DemonCharge = 412788,
+		DemonicHowl = 412789,
+		Menace = 403828,
+		ShadowCleave = 403840,
+	Shadowflame = 426320,
+	SummonFelguard = 427733,
+	UnstableAffliction = 427717,
 }
 --Pet
 ids.Pet = {
@@ -302,22 +330,16 @@ ids.Pet = {
 }
 -- Auras
 ids.Buff = {
+	Backdraft = 427714,
 	BurningWish = 18789,
+	Decimation = 440873,
 	FelEnergy = 18792,
 	FelStamina = 18790,
 	ShadowTrance = 17941,
 	TouchofShadow = 18791,
-	--[[
-	LifeTap = 63321,
-	SpiritsoftheDamned = 61082,
-	IllustrationoftheDragonSoul = 60486,
-	MoltenCore = 71165,
-	DecimationRank1 = 163165,
-	DecimationRank2 = 163167,
-	--]]
 }
 ids.Debuff = {
-	LakeofFire = 403650,
+
 }
 
 function ConROC:UpdateSpellID()
@@ -359,11 +381,20 @@ function ConROC:UpdateSpellID()
 	if IsSpellKnown(ids.Rank.DeathCoilRank3) then ids.Ability.DeathCoil = ids.Rank.DeathCoilRank3;
 	elseif IsSpellKnown(ids.Rank.DeathCoilRank2) then ids.Ability.DeathCoil = ids.Rank.DeathCoilRank2; end
 
-	if IsSpellKnown(ids.Rank.DrainLifeRank6) then ids.Ability.DrainLife = ids.Rank.DrainLifeRank6;
-	elseif IsSpellKnown(ids.Rank.DrainLifeRank5) then ids.Ability.DrainLife = ids.Rank.DrainLifeRank5;
-	elseif IsSpellKnown(ids.Rank.DrainLifeRank4) then ids.Ability.DrainLife = ids.Rank.DrainLifeRank4;
-	elseif IsSpellKnown(ids.Rank.DrainLifeRank3) then ids.Ability.DrainLife = ids.Rank.DrainLifeRank3;
-	elseif IsSpellKnown(ids.Rank.DrainLifeRank2) then ids.Ability.DrainLife = ids.Rank.DrainLifeRank2; end
+	if ConROC.Seasons.IsSoD and ConROC:RuneEquipped(ids.Engrave.MasterChanneler, "chest") then
+		if IsSpellKnown(ids.Rank.DrainLifeRank6) then ids.Ability.DrainLife = ids.Rank.DrainLifeSoDRank6;
+		elseif IsSpellKnown(ids.Rank.DrainLifeRank5) then ids.Ability.DrainLife = ids.Rank.DrainLifeSoDRank5;
+		elseif IsSpellKnown(ids.Rank.DrainLifeRank4) then ids.Ability.DrainLife = ids.Rank.DrainLifeSoDRank4;
+		elseif IsSpellKnown(ids.Rank.DrainLifeRank3) then ids.Ability.DrainLife = ids.Rank.DrainLifeSoDRank3;
+		elseif IsSpellKnown(ids.Rank.DrainLifeRank2) then ids.Ability.DrainLife = ids.Rank.DrainLifeSoDRank2;
+		elseif IsSpellKnown(ids.Rank.DrainLifeRank1) then ids.Ability.DrainLife = ids.Rank.DrainLifeSoDRank1; end
+	else
+		if IsSpellKnown(ids.Rank.DrainLifeRank6) then ids.Ability.DrainLife = ids.Rank.DrainLifeRank6;
+		elseif IsSpellKnown(ids.Rank.DrainLifeRank5) then ids.Ability.DrainLife = ids.Rank.DrainLifeRank5;
+		elseif IsSpellKnown(ids.Rank.DrainLifeRank4) then ids.Ability.DrainLife = ids.Rank.DrainLifeRank4;
+		elseif IsSpellKnown(ids.Rank.DrainLifeRank3) then ids.Ability.DrainLife = ids.Rank.DrainLifeRank3;
+		elseif IsSpellKnown(ids.Rank.DrainLifeRank2) then ids.Ability.DrainLife = ids.Rank.DrainLifeRank2; end
+	end
 
 	if IsSpellKnown(ids.Rank.DrainManaRank4) then ids.Ability.DrainMana = ids.Rank.DrainManaRank4;
 	elseif IsSpellKnown(ids.Rank.DrainManaRank3) then ids.Ability.DrainMana = ids.Rank.DrainManaRank3;

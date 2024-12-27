@@ -24,14 +24,17 @@ local defaults = {
 	["ConROC_SM_Role_Caster"] = true,
 
 	["ConROC_Caster_Demon_Imp"] = true,
+	["ConROC_Caster_Armor_DemonArmor"] = true,
 	["ConROC_Caster_Curse_Weakness"] = true,
 	["ConROC_Caster_Debuff_Immolate"] = true,
 	["ConROC_Caster_Debuff_Corruption"] = true,
 	["ConROC_Caster_Debuff_SiphonLife"] = true,
-	["ConROC_Caster_Spell_ShadowBolt"] = true,
+	["ConROC_Caster_Filler_ShadowBolt"] = true,
 	["ConROC_Caster_Option_SoulShard"] = 5,
-	["ConROC_PvP_Option_SoulShard"] = 5,
+	["ConROC_Caster_Option_AoE"] = false,
 	["ConROC_Caster_Option_UseWand"] = true,
+
+	["ConROC_PvP_Option_SoulShard"] = 5,
 }
 
 ConROCWarlockSpells = ConROCWarlockSpells or defaults;
@@ -120,68 +123,89 @@ function ConROC:SpellmenuClass()
 	}
 	ConROC_RotationSettingsTable = {
 		{
-	    frameName = "Demons",
-	    spells = {
-	      {spellID = ids.Ability.SummonImp, spellCheckbox = "Demon_Imp", reqLevel = 1, type="spell"},
-	      {spellID = ids.Ability.SummonVoidwalker, spellCheckbox = "Demon_Voidwalker", reqLevel = 10, type="spell"},
-	      {spellID = ids.Ability.SummonIncubus, spellCheckbox = "Demon_Incubus", reqLevel = 20, type="spell"},
-	      {spellID = ids.Ability.SummonSuccubus, spellCheckbox = "Demon_Succubus", reqLevel = 20, type="spell"},
-	      {spellID = ids.Ability.SummonFelhunter, spellCheckbox = "Demon_Felhunter", reqLevel = 30, type="spell"},
-	      {spellID = "None", spellCheckbox = "Demon_None", reqLevel = 1, type="none"}
-	    },
-	    groupType = "radioButtons"
-	  },
-	  {
-	    frameName = "Curses",
-	    spells = {
-	      {spellID = ids.Ability.CurseofWeakness, spellCheckbox = "Curse_Weakness", reqLevel = 4, type="spell"},
-	      {spellID = ids.Ability.CurseofAgony, spellCheckbox = "Curse_Agony", reqLevel = 8, type="spell"},
-	      {spellID = ids.Ability.CurseofRecklessness, spellCheckbox = "Curse_Recklessness", reqLevel = 8, type="spell"},
-	      {spellID = ids.Ability.CurseofTongues, spellCheckbox = "Curse_Tongues", reqLevel = 26, type="spell"},
-	      {spellID = ids.Ability.CurseofExhaustion, spellCheckbox = "Curse_Exhaustion", reqLevel = 30, type="spell"},
-	      {spellID = ids.Ability.CurseoftheElements, spellCheckbox = "Curse_Elements", reqLevel = 32, type="spell"},
-	      {spellID = ids.Ability.CurseofShadow, spellCheckbox = "Curse_Shadow", reqLevel = 32, type="spell"},
-	      {spellID = ids.Ability.CurseofDoom, spellCheckbox = "Curse_Doom", reqLevel = 60, type="spell"},
-	      {spellID = "None", spellCheckbox = "Curse_None", reqLevel = 1, type="none"}
-	    },
-	    groupType = "radioButtons"
-	  },
-	  {
-	    frameName = "Dots",
-	    spells = {
-	    	{spellID = ids.Ability.Immolate, spellCheckbox = "Debuff_Immolate", reqLevel = 1, type="spell"},
-	    	{spellID = ids.Ability.Corruption, spellCheckbox = "Debuff_Corruption", reqLevel = 4, type="spell"},
-	    	{spellID = ids.Ability.SiphonLife, spellCheckbox = "Debuff_SiphonLife", reqLevel = 4, type="spell"},
-	    	{spellID = ids.Ability.SoulFire, spellCheckbox = "Debuff_SoulFire", reqLevel = 48, type="spell"},	    	
-	    },
-	    groupType = "checkBoxes"
-	  },
-	  {
-	    frameName = "Fillers",
-	    spells = {
-	    	{spellID = ids.Ability.ShadowBolt, spellCheckbox = "Spell_ShadowBolt", reqLevel = 1, type="spell"},
-	    	{spellID = ids.Ability.SearingPain, spellCheckbox = "Spell_SearingPain", reqLevel = 18, type="spell"},
-	    },
-	    groupType = "checkBoxes"
-	  },
-	  {
-	    frameName = "AoEs",
-	    spells = {
-	    	{spellID = ids.Ability.RainofFire, spellCheckbox = "AoE_RainofFire", reqLevel = 20, type="spell"},
-	    	{spellID = ids.Ability.Hellfire, spellCheckbox = "AoE_Hellfire", reqLevel = 30, type="spell"},
-	    },
-	    groupType = "checkBoxes"
-	  },
-	  {
-	    frameName = "Options",
-	    spells = {
-	    	--{spellID = ids.Runes.Metamorphosis, spellCheckbox = "Option_Metamorphosis", reqLevel = 60, type="spell"},
-	    	{spellID = ids.Ability.DrainSoul, spellCheckbox = "Option_SoulShard", reqLevel = 10, type="textfield", icon=134075, customName="Minimum Soul Shards"},
-		    --{spellID = "Use Prepull actions", spellCheckbox = "Option_PrePull", reqLevel = 15, type="custom", icon=237511, customName="Use Prepull actions"},
-	    	{spellID = "AoE Toggle Button", spellCheckbox = "Option_AoE", reqLevel = 20, type = "aoetoggler"},
-	    	{spellID = "Use Wand", spellCheckbox = "Option_UseWand", reqLevel = 5, type = "wand"}
-	    }
-	  }
+			frameName = "Demons",
+			spells = {
+			{spellID = ids.Ability.SummonImp, spellCheckbox = "Demon_Imp", reqLevel = 1, type="spell"},
+			{spellID = ids.Ability.SummonVoidwalker, spellCheckbox = "Demon_Voidwalker", reqLevel = 10, type="spell"},
+			{spellID = ids.Ability.SummonIncubus, spellCheckbox = "Demon_Incubus", reqLevel = 20, type="spell"},
+			{spellID = ids.Ability.SummonSuccubus, spellCheckbox = "Demon_Succubus", reqLevel = 20, type="spell"},
+			{spellID = ids.Ability.SummonFelhunter, spellCheckbox = "Demon_Felhunter", reqLevel = 30, type="spell"},
+			{spellID = ids.Runes.SummonFelguard, spellCheckbox = "Demon_Felguard", reqLevel = 1, type="spell"},
+			{spellID = "None", spellCheckbox = "Demon_None", reqLevel = 1, type="none"}
+			},
+			groupType = "radioButtons"
+	  	},
+	  	{
+			frameName = "Armors",
+			spells = {
+				{spellID = ids.Ability.DemonArmor, spellCheckbox = "Armor_DemonArmor", reqLevel = 1, type = "spell"},
+				{spellID = ids.Runes.FelArmor, spellCheckbox = "Armor_FelArmor", reqLevel = 1, type = "spell"},
+			},
+			groupType = "radioButtons"
+		},
+		{
+			frameName = "Curses",
+			spells = {
+			{spellID = ids.Ability.CurseofWeakness, spellCheckbox = "Curse_Weakness", reqLevel = 4, type="spell"},
+			{spellID = ids.Ability.CurseofAgony, spellCheckbox = "Curse_Agony", reqLevel = 8, type="spell"},
+			{spellID = ids.Ability.CurseofRecklessness, spellCheckbox = "Curse_Recklessness", reqLevel = 8, type="spell"},
+			{spellID = ids.Ability.CurseofTongues, spellCheckbox = "Curse_Tongues", reqLevel = 26, type="spell"},
+			{spellID = ids.Ability.CurseofExhaustion, spellCheckbox = "Curse_Exhaustion", reqLevel = 30, type="spell"},
+			{spellID = ids.Ability.CurseoftheElements, spellCheckbox = "Curse_Elements", reqLevel = 32, type="spell"},
+			{spellID = ids.Ability.CurseofShadow, spellCheckbox = "Curse_Shadow", reqLevel = 32, type="spell"},
+			{spellID = ids.Ability.CurseofDoom, spellCheckbox = "Curse_Doom", reqLevel = 60, type="spell"},
+			{spellID = "None", spellCheckbox = "Curse_None", reqLevel = 1, type="none"}
+			},
+			groupType = "radioButtons"
+		},
+		{
+			frameName = "Dots",
+			spells = {
+				{spellID = ids.Ability.Immolate, spellCheckbox = "Debuff_Immolate", reqLevel = 1, type = "spell"},
+				{spellID = ids.Runes.UnstableAffliction, spellCheckbox = "Debuff_UnstableAffliction", reqLevel = 1, type = "spell"},
+				{spellID = ids.Runes.Shadowflame, spellCheckbox = "Debuff_Shadowflame", reqLevel = 1, type = "spell"},
+				{spellID = ids.Ability.Corruption, spellCheckbox = "Debuff_Corruption", reqLevel = 4, type = "spell"},
+				{spellID = ids.Ability.SiphonLife, spellCheckbox = "Debuff_SiphonLife", reqLevel = 30, type = "spell"},
+				{spellID = ids.Ability.SoulFire, spellCheckbox = "Debuff_SoulFire", reqLevel = 48, type = "spell"},
+			},
+			groupType = "checkBoxes"
+		},
+	  	{
+			frameName = "Fillers",
+			spells = {
+				{spellID = ids.Ability.ShadowBolt, spellCheckbox = "Filler_ShadowBolt", reqLevel = 1, type="spell"},
+				{spellID = ids.Runes.Incinerate, spellCheckbox = "Filler_Incinerate", reqLevel = 1, type="spell"},
+				{spellID = ids.Ability.SearingPain, spellCheckbox = "Filler_SearingPain", reqLevel = 18, type="spell"},
+			},
+			groupType = "radioButtons"
+	  	},
+		{
+			frameName = "Mana",
+			spells = {
+				{spellID = ids.Ability.LifeTap, spellCheckbox = "Mana_LifeTap", reqLevel = 1, type="spell"},
+				{spellID = ids.Ability.DrainMana, spellCheckbox = "Mana_DrainMana", reqLevel = 24, type="spell"},
+			},
+			groupType = "checkBoxes"
+	  	},
+	  	{
+			frameName = "AoEs",
+			spells = {
+				{spellID = ids.Ability.RainofFire, spellCheckbox = "AoE_RainofFire", reqLevel = 20, type="spell"},
+				{spellID = ids.Ability.Hellfire, spellCheckbox = "AoE_Hellfire", reqLevel = 30, type="spell"},
+			},
+			groupType = "checkBoxes"
+	  	},
+	  	{
+			frameName = "Options",
+			spells = {
+				--{spellID = ids.Runes.Metamorphosis, spellCheckbox = "Option_Metamorphosis", reqLevel = 60, type="spell"},
+				{spellID = ids.Ability.DrainSoul, spellCheckbox = "Option_SoulShard", reqLevel = 10, type = "textfield", icon = 6265, customName = "Minimum Soul Shards"},
+				--{spellID = "Use Prepull actions", spellCheckbox = "Option_PrePull", reqLevel = 15, type="custom", icon=237511, customName="Use Prepull actions"},
+				{spellID = "AoE Detect", spellCheckbox = "Option_AoE", reqLevel = 20, type = "custom", icon = ids.Ability.RainofFire, customName = "AoE Detect"},
+				--{spellID = "AoE Toggle Button", spellCheckbox = "Option_AoE", reqLevel = 20, type = "aoetoggler"},
+				{spellID = "Use Wand", spellCheckbox = "Option_UseWand", reqLevel = 5, type = "wand"}
+			}
+	  	}
 	}
 
 	local _, Class, classId = UnitClass("player")
@@ -275,6 +299,7 @@ function ConROC:SpellmenuClass()
 	ConROCScrollChild:SetScript("OnSizeChanged", CheckScrollbarVisibility)
 	ConROCScrollContainer:SetScript("OnShow", CheckScrollbarVisibility)		
 end
+
 local function ConROC_NoOptionsFrame()
     if ConROCNoOptions then
         return
@@ -301,8 +326,8 @@ local function ConROC_NoOptionsFrame()
     ConROCNoOptions:SetHeight(ConROCNoOptions.text:GetHeight())
     ConROCNoOptions:Show()
 end
-function ConROC_roles(frame)
 
+function ConROC_roles(frame)
     local radioButtons = {}
 	local roleIconSize = 32;
 	local sizeCheck = (math.ceil(frame:GetWidth()-20)/#ConROC_RoleSettingsTable)
@@ -311,7 +336,7 @@ function ConROC_roles(frame)
     elseif (sizeCheck <= 28) then
     	roleIconSize = 24
     end
-    
+
     local roleSpaceValue = (math.ceil(frame:GetWidth())-20-roleIconSize) / (#ConROC_RoleSettingsTable-1)
     for i, roleData in ipairs(ConROC_RoleSettingsTable) do
         local radioBtn = CreateFrame("CheckButton", roleData.role, frame, "UIRadioButtonTemplate")
@@ -389,7 +414,7 @@ function ConROC_OptionsWindow(_table, _roles)
         text:SetPoint("CENTER", frame, "CENTER")
         text:SetText(_table[i].frameName)
         frame.text = text -- store the text object in the frame for later use
-        
+
         spellFrameHeight = 0;
         local _spellFrame = CreateFrame("Frame", "ConROC_CheckFrame"..i, frame, "BackdropTemplate");
         _spellFrame:SetSize(scrollContentWidth, 5)
@@ -456,7 +481,7 @@ function ConROC:OptionCheckboxSpell(_spellData, i, j, _spellFrame)
 	--spell start
 	local spellName, _, spellTexture = GetSpellInfo(_spellData.spellID)
 	local oItem = CreateFrame("CheckButton", "ConROC_SM_".._spellData.spellCheckbox, _spellFrame, "UICheckButtonTemplate");
-	local oItemtext = oItem:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall");		
+	local oItemtext = oItem:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall");
 	if j == 1 then
 		oItem:SetPoint("TOPLEFT", lastFrame, "TOPLEFT", 0, 0);
 	else
@@ -482,12 +507,13 @@ function ConROC:OptionCheckboxSpell(_spellData, i, j, _spellFrame)
 	c1t:SetSize(20,20)
 	c1t:SetPoint("LEFT", oItem, "RIGHT", 2, 0);
 	oItemtext:SetPoint('LEFT', c1t, 'RIGHT', 4, 0);
-	
+
 	scrollHeight = scrollHeight + math.ceil(lastFrame:GetHeight());
 	spellFrameHeight = spellFrameHeight + math.ceil(lastFrame:GetHeight());
 	lastFrame:Show();
 	--spell end
 end
+
 function ConROC:OptionRadioButtonSpell(_spellData, i, j, _spellFrame, _radioButtonsTable)
 	--spell start
 	local spellName, _, spellTexture;
@@ -498,7 +524,7 @@ function ConROC:OptionRadioButtonSpell(_spellData, i, j, _spellFrame, _radioButt
 	end
 	local myFrame = "ConROC_SM_".._spellData.spellCheckbox
 	local oItem = CreateFrame("CheckButton", myFrame, _spellFrame, "UIRadioButtonTemplate");
-	local oItemtext = oItem:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall");		
+	local oItemtext = oItem:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall");
 	if j == 1 then
 		oItem:SetPoint("TOPLEFT", lastFrame, "TOPLEFT", 0, 0);
 	else
@@ -506,24 +532,22 @@ function ConROC:OptionRadioButtonSpell(_spellData, i, j, _spellFrame, _radioButt
 	end
 	lastFrame = oItem;
 	oItem:SetSize(20,20)
-	
+
 	ConROC:setRoleChecked(_spellData, oItem)
 	oItem.spellCheckbox = _spellData.spellCheckbox
 	_radioButtonsTable[j] = oItem;
-	
-	oItem:SetScript("OnClick", 
+
+	oItem:SetScript("OnClick",
 		function(self)
 			local role, checkboxName, frameName = ConROC:checkActiveRole()
 			for _, radioButton in ipairs(_radioButtonsTable) do
 				if radioButton ~= self then
 					radioButton:SetChecked(false)
 					ConROCWarlockSpells[checkboxName .. radioButton.spellCheckbox] = radioButton:GetChecked()
-					
 				else
 					-- Perform any additional logic based on the selected button
 					self:SetChecked(true)
 					ConROCWarlockSpells[checkboxName .. radioButton.spellCheckbox] = self:GetChecked()
-					
 				end
 			end
 		end);
@@ -660,7 +684,7 @@ end
 function ConROC:CustomOption(_spellData, i, j, _spellFrame)
 	local spellName, _, spellTexture = GetSpellInfo(_spellData.spellID)
 	local oItem = CreateFrame("CheckButton", "ConROC_SM_".._spellData.spellCheckbox, _spellFrame, "UICheckButtonTemplate");
-	local oItemtext = oItem:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall");		
+	local oItemtext = oItem:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall");
 	if j == 1 then
 		oItem:SetPoint("TOPLEFT", lastFrame, "TOPLEFT", 0, 0);
 	else
@@ -670,7 +694,7 @@ function ConROC:CustomOption(_spellData, i, j, _spellFrame)
 	oItem:SetSize(20,20)
 	ConROC:setRoleChecked(_spellData, oItem)
 
-	oItem:SetScript("OnClick", 
+	oItem:SetScript("OnClick",
 		function(self)
 			ConROC:setRoleSpellClicked(_spellData, self)
 		end);
@@ -686,7 +710,7 @@ function ConROC:CustomOption(_spellData, i, j, _spellFrame)
 	c1t:SetSize(20,20)
 	c1t:SetPoint("LEFT", oItem, "RIGHT", 2, 0);
 	oItemtext:SetPoint('LEFT', c1t, 'RIGHT', 4, 0);
-	
+
 	scrollHeight = scrollHeight + math.ceil(lastFrame:GetHeight());
 	spellFrameHeight = spellFrameHeight + math.ceil(lastFrame:GetHeight());
 	lastFrame:Show();
