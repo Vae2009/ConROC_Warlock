@@ -131,6 +131,9 @@ ids.Rank = {
 	FearRank1 = 5782,
 	FearRank2 = 6213,
 	FearRank3 = 6215,
+	MenaceRank1 = 403828,
+	MenaceRank2 = 442226,
+	MenaceRank3 = 442233,
 	HowlofTerrorRank1 = 5484,
 	HowlofTerrorRank2 = 17928,
 	LifeTapRank1 = 1454,
@@ -223,6 +226,16 @@ ids.Rank = {
 	ShadowBoltRank8 = 11660,
 	ShadowBoltRank9 = 11661,
 	ShadowBoltRank10 = 25307,
+	ShadowCleaveRank1 = 403835,
+	ShadowCleaveRank2 = 403839,
+	ShadowCleaveRank3 = 403840,
+	ShadowCleaveRank4 = 403841,
+	ShadowCleaveRank5 = 403842,
+	ShadowCleaveRank6 = 403843,
+	ShadowCleaveRank7 = 403844,
+	ShadowCleaveRank8 = 403848,
+	ShadowCleaveRank9 = 403851,
+	ShadowCleaveRank10 = 403852,
 	ShadowburnRank1 = 17877,
 	ShadowburnRank2 = 18867,
 	ShadowburnRank3 = 18868,
@@ -317,7 +330,7 @@ ids.Runes = {
 		DemonCharge = 412788,
 		DemonicHowl = 412789,
 		Menace = 403828,
-		ShadowCleave = 403840,
+		ShadowCleave = 403835,
 	Shadowflame = 426320,
 	SummonFelguard = 427733,
 	UnstableAffliction = 427717,
@@ -404,8 +417,8 @@ function ConROC:UpdateSpellID()
 	elseif IsSpellKnown(ids.Rank.DrainSoulRank3) then ids.Ability.DrainSoul = ids.Rank.DrainSoulRank3;
 	elseif IsSpellKnown(ids.Rank.DrainSoulRank2) then ids.Ability.DrainSoul = ids.Rank.DrainSoulRank2; end
 
-	if IsSpellKnown(ids.Rank.FearRank3) then ids.Ability.Fear = ids.Rank.FearRank3;
-	elseif IsSpellKnown(ids.Rank.FearRank2) then ids.Ability.Fear = ids.Rank.FearRank2; end
+	if IsSpellKnown(ids.Rank.FearRank3) then ids.Ability.Fear = ids.Rank.FearRank3; ids.Runes.Menace = ids.Rank.MenaceRank2;
+	elseif IsSpellKnown(ids.Rank.FearRank2) then ids.Ability.Fear = ids.Rank.FearRank2; ids.Runes.Menace = ids.Rank.MenaceRank2; end
 
 	if IsSpellKnown(ids.Rank.HowlofTerrorRank2) then ids.Ability.HowlofTerror = ids.Rank.HowlofTerrorRank2; end
 
@@ -489,15 +502,15 @@ function ConROC:UpdateSpellID()
 	elseif IsSpellKnown(ids.Rank.SearingPainRank3) then ids.Ability.SearingPain = ids.Rank.SearingPainRank3;
 	elseif IsSpellKnown(ids.Rank.SearingPainRank2) then ids.Ability.SearingPain = ids.Rank.SearingPainRank2; end
 
-	if IsSpellKnown(ids.Rank.ShadowBoltRank10) then ids.Ability.ShadowBolt = ids.Rank.ShadowBoltRank10;
-	elseif IsSpellKnown(ids.Rank.ShadowBoltRank9) then ids.Ability.ShadowBolt = ids.Rank.ShadowBoltRank9;
-	elseif IsSpellKnown(ids.Rank.ShadowBoltRank8) then ids.Ability.ShadowBolt = ids.Rank.ShadowBoltRank8;
-	elseif IsSpellKnown(ids.Rank.ShadowBoltRank7) then ids.Ability.ShadowBolt = ids.Rank.ShadowBoltRank7;
-	elseif IsSpellKnown(ids.Rank.ShadowBoltRank6) then ids.Ability.ShadowBolt = ids.Rank.ShadowBoltRank6;
-	elseif IsSpellKnown(ids.Rank.ShadowBoltRank5) then ids.Ability.ShadowBolt = ids.Rank.ShadowBoltRank5;
-	elseif IsSpellKnown(ids.Rank.ShadowBoltRank4) then ids.Ability.ShadowBolt = ids.Rank.ShadowBoltRank4;
-	elseif IsSpellKnown(ids.Rank.ShadowBoltRank3) then ids.Ability.ShadowBolt = ids.Rank.ShadowBoltRank3;
-	elseif IsSpellKnown(ids.Rank.ShadowBoltRank2) then ids.Ability.ShadowBolt = ids.Rank.ShadowBoltRank2; end
+	if IsSpellKnown(ids.Rank.ShadowBoltRank10) then ids.Ability.ShadowBolt = ids.Rank.ShadowBoltRank10; ids.Runes.ShadowCleave = ids.Rank.ShadowCleaveRank10;
+	elseif IsSpellKnown(ids.Rank.ShadowBoltRank9) then ids.Ability.ShadowBolt = ids.Rank.ShadowBoltRank9; ids.Runes.ShadowCleave = ids.Rank.ShadowCleaveRank9;
+	elseif IsSpellKnown(ids.Rank.ShadowBoltRank8) then ids.Ability.ShadowBolt = ids.Rank.ShadowBoltRank8; ids.Runes.ShadowCleave = ids.Rank.ShadowCleaveRank8;
+	elseif IsSpellKnown(ids.Rank.ShadowBoltRank7) then ids.Ability.ShadowBolt = ids.Rank.ShadowBoltRank7; ids.Runes.ShadowCleave = ids.Rank.ShadowCleaveRank7;
+	elseif IsSpellKnown(ids.Rank.ShadowBoltRank6) then ids.Ability.ShadowBolt = ids.Rank.ShadowBoltRank6; ids.Runes.ShadowCleave = ids.Rank.ShadowCleaveRank6;
+	elseif IsSpellKnown(ids.Rank.ShadowBoltRank5) then ids.Ability.ShadowBolt = ids.Rank.ShadowBoltRank5; ids.Runes.ShadowCleave = ids.Rank.ShadowCleaveRank5;
+	elseif IsSpellKnown(ids.Rank.ShadowBoltRank4) then ids.Ability.ShadowBolt = ids.Rank.ShadowBoltRank4; ids.Runes.ShadowCleave = ids.Rank.ShadowCleaveRank4;
+	elseif IsSpellKnown(ids.Rank.ShadowBoltRank3) then ids.Ability.ShadowBolt = ids.Rank.ShadowBoltRank3; ids.Runes.ShadowCleave = ids.Rank.ShadowCleaveRank3;
+	elseif IsSpellKnown(ids.Rank.ShadowBoltRank2) then ids.Ability.ShadowBolt = ids.Rank.ShadowBoltRank2; ids.Runes.ShadowCleave = ids.Rank.ShadowCleaveRank2; end
 
 	if IsSpellKnown(ids.Rank.ShadowburnRank6) then ids.Ability.Shadowburn = ids.Rank.ShadowburnRank6;
 	elseif IsSpellKnown(ids.Rank.ShadowburnRank5) then ids.Ability.Shadowburn = ids.Rank.ShadowburnRank5;

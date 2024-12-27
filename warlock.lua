@@ -222,7 +222,7 @@ function ConROC.Warlock.Damage(_, timeShift, currentSpell, gcd)
 				return _Incinerate;
 			end
 
-			if _enemies_in_10yrds >= 3 then
+			if ConROC:CheckBox(ConROC_SM_Option_AoE) and _enemies_in_10yrds >= 3 then
 				if _RainofFire_RDY and ConROC:RuneEquipped(Engrave.LakeofFire , "chest") then
 					return _RainofFire;
 				end
@@ -238,6 +238,7 @@ function ConROC.Warlock.Damage(_, timeShift, currentSpell, gcd)
 				if _Hellfire_RDY and _enemies_in_10yrds >= 3 and _Player_Percent_Health >= 30 then
 					return _Hellfire;
 				end
+			return nil;
 			end
 
 			if _SearingPain_RDY and not _target_in_melee then
@@ -281,7 +282,7 @@ function ConROC.Warlock.Damage(_, timeShift, currentSpell, gcd)
 				return _DemonicGrace;
 			end
 
-			if _DrainLife_RDY and ConROC:RuneEquipped(Engrave.MasterChanneler, "chest") and not _DrainLife_DEBUFF then
+			if _DrainLife_RDY and ConROC:RuneEquipped(Engrave.MasterChanneler, "chest") and not _DrainLife_DEBUFF and not ConROC:CreatureType("Mechanical") then
 				return _DrainLife;
 			end
 
@@ -400,7 +401,7 @@ function ConROC.Warlock.Damage(_, timeShift, currentSpell, gcd)
 			return _SiphonLife;
 		end
 
-		if _DrainLife_RDY and ConROC:RuneEquipped(Engrave.MasterChanneler, "chest") and not _DrainLife_DEBUFF then
+		if _DrainLife_RDY and ConROC:RuneEquipped(Engrave.MasterChanneler, "chest") and not _DrainLife_DEBUFF and not ConROC:CreatureType("Mechanical") then
 			return _DrainLife;
 		end
 
@@ -542,7 +543,7 @@ function ConROC.Warlock.Defense(_, timeShift, currentSpell, gcd)
 		return _SoulLink;
 	end
 
-	if _DrainLife_RDY and _Player_Percent_Health <= 30 then
+	if _DrainLife_RDY and _Player_Percent_Health <= 30 and not ConROC:CreatureType("Mechanical") then
 		return _DrainLife;
 	end
 
