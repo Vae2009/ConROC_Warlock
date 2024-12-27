@@ -336,6 +336,26 @@ function ConROC.Warlock.Damage(_, timeShift, currentSpell, gcd)
 			end
 		end
 
+		if _Shadowburn_RDY and ((_Target_Percent_Health <= 5 and ConROC:Raidmob()) or (_Target_Percent_Health <= 20 and not ConROC:Raidmob())) then
+			return _Shadowburn;
+		end
+
+		if _Incinerate_RDY and not _Incinerate_BUFF then
+			return _Incinerate
+		end
+
+		if ConROC:CheckBox(ConROC_SM_Debuff_Shadowflame) and _Shadowflame_RDY and currentSpell ~= _Shadowflame and not _Shadowflame_DEBUFF and ((ConROC:Raidmob() and _Target_Percent_Health >= 5) or (not ConROC:Raidmob() and _Target_Percent_Health >= 20)) then
+			return _Shadowflame;
+		end
+
+		if ConROC:CheckBox(ConROC_SM_Debuff_Corruption) and _Corruption_RDY and not _Corruption_DEBUFF and currentSpell ~= _Corruption and ((ConROC:Raidmob() and _Target_Percent_Health >= 5) or (not ConROC:Raidmob() and _Target_Percent_Health >= 20)) then
+			return _Corruption;
+		end
+
+		if ConROC:CheckBox(ConROC_SM_Debuff_UnstableAffliction) and _UnstableAffliction_RDY and currentSpell ~= _UnstableAffliction and not _UnstableAffliction_DEBUFF and ((ConROC:Raidmob() and _Target_Percent_Health >= 5) or (not ConROC:Raidmob() and _Target_Percent_Health >= 20)) then
+			return _UnstableAffliction;
+		end
+
 		--Curses--
 		if ConROC:CheckBox(ConROC_SM_Curse_Weakness) and _CurseofWeakness_RDY and not _CurseofWeakness_DEBUFF and ((ConROC:Raidmob() and _Target_Percent_Health >= 5) or (not ConROC:Raidmob() and _Target_Percent_Health >= 20)) then
 			return _CurseofWeakness;
@@ -369,28 +389,8 @@ function ConROC.Warlock.Damage(_, timeShift, currentSpell, gcd)
 			return _CurseofDoom;
 		end
 
-		if _Incinerate_RDY and not _Incinerate_BUFF then
-			return _Incinerate
-		end
-
-		if _Shadowburn_RDY and (_is_moving or ((_Target_Percent_Health <= 5 and ConROC:Raidmob()) or (_Target_Percent_Health <= 20 and not ConROC:Raidmob()))) then
-			return _Shadowburn;
-		end
-
 		if _Haunt_RDY and not _Haunt_DEBUFF then
 			return _Haunt;
-		end
-
-		if ConROC:CheckBox(ConROC_SM_Debuff_Corruption) and _Corruption_RDY and not _Corruption_DEBUFF and currentSpell ~= _Corruption and ((ConROC:Raidmob() and _Target_Percent_Health >= 5) or (not ConROC:Raidmob() and _Target_Percent_Health >= 20)) then
-			return _Corruption;
-		end
-
-		if ConROC:CheckBox(ConROC_SM_Debuff_UnstableAffliction) and _UnstableAffliction_RDY and currentSpell ~= _UnstableAffliction and not _UnstableAffliction_DEBUFF and ((ConROC:Raidmob() and _Target_Percent_Health >= 5) or (not ConROC:Raidmob() and _Target_Percent_Health >= 20)) then
-			return _UnstableAffliction;
-		end
-
-		if ConROC:CheckBox(ConROC_SM_Debuff_Shadowflame) and _Shadowflame_RDY and currentSpell ~= _Shadowflame and not _Shadowflame_DEBUFF and ((ConROC:Raidmob() and _Target_Percent_Health >= 5) or (not ConROC:Raidmob() and _Target_Percent_Health >= 20)) then
-			return _Shadowflame;
 		end
 
 		if ConROC:CheckBox(ConROC_SM_Debuff_Immolate) and _Immolate_RDY and currentSpell ~= _Immolate and not _Immolate_DEBUFF and not _Shadowflame_DEBUFF and not _UnstableAffliction_DEBUFF and ((ConROC:Raidmob() and _Target_Percent_Health >= 5) or (not ConROC:Raidmob() and _Target_Percent_Health >= 20)) then
