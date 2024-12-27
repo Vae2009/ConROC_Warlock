@@ -210,6 +210,10 @@ ids.Rank = {
 	RainofFireRank2 = 6219,
 	RainofFireRank3 = 11677,
 	RainofFireRank4 = 11678,
+	RainofFireSoDRank1 = 460692,
+	RainofFireSoDRank2 = 460698,
+	RainofFireSoDRank3 = 460699,
+	RainofFireSoDRank4 = 460700,
 	SearingPainRank1 = 5676,
 	SearingPainRank2 = 17919,
 	SearingPainRank3 = 17920,
@@ -492,9 +496,16 @@ function ConROC:UpdateSpellID()
 	elseif IsSpellKnown(ids.Rank.ImmolateRank3) then ids.Ability.Immolate = ids.Rank.ImmolateRank3;
 	elseif IsSpellKnown(ids.Rank.ImmolateRank2) then ids.Ability.Immolate = ids.Rank.ImmolateRank2; end
 
-	if IsSpellKnown(ids.Rank.RainofFireRank4) then ids.Ability.RainofFire = ids.Rank.RainofFireRank4;
-	elseif IsSpellKnown(ids.Rank.RainofFireRank3) then ids.Ability.RainofFire = ids.Rank.RainofFireRank3;
-	elseif IsSpellKnown(ids.Rank.RainofFireRank2) then ids.Ability.RainofFire = ids.Rank.RainofFireRank2; end
+	if ConROC.Seasons.IsSoD and ConROC:RuneEquipped(ids.Engrave.LakeofFire, "chest") then
+		if IsSpellKnown(ids.Rank.RainofFireRank4) then ids.Ability.RainofFire = ids.Rank.RainofFireSoDRank4;
+		elseif IsSpellKnown(ids.Rank.RainofFireRank3) then ids.Ability.RainofFire = ids.Rank.RainofFireSoDRank3;
+		elseif IsSpellKnown(ids.Rank.RainofFireRank2) then ids.Ability.RainofFire = ids.Rank.RainofFireSoDRank2;
+		elseif IsSpellKnown(ids.Rank.RainofFireRank1) then ids.Ability.RainofFire = ids.Rank.RainofFireSoDRank1; end
+	else
+		if IsSpellKnown(ids.Rank.RainofFireRank4) then ids.Ability.RainofFire = ids.Rank.RainofFireRank4;
+		elseif IsSpellKnown(ids.Rank.RainofFireRank3) then ids.Ability.RainofFire = ids.Rank.RainofFireRank3;
+		elseif IsSpellKnown(ids.Rank.RainofFireRank2) then ids.Ability.RainofFire = ids.Rank.RainofFireRank2; end
+	end
 
 	if IsSpellKnown(ids.Rank.SearingPainRank6) then ids.Ability.SearingPain = ids.Rank.SearingPainRank6;
 	elseif IsSpellKnown(ids.Rank.SearingPainRank5) then ids.Ability.SearingPain = ids.Rank.SearingPainRank5;
