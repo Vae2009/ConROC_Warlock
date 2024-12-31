@@ -22,19 +22,73 @@ local scrollHeight = 0;
 local plvl = UnitLevel('player');
 local defaults = {
 	["ConROC_SM_Role_Caster"] = true,
+	["ConROC_SM_Role_PvP"] = false,
 
 	["ConROC_Caster_Demon_Imp"] = true,
+	["ConROC_Caster_Demon_Voidwalker"] = false,
+	["ConROC_Caster_Demon_Incubus"] = false,
+	["ConROC_Caster_Demon_Succubus"] = false,
+	["ConROC_Caster_Demon_Felhunter"] = false,
+	["ConROC_Caster_Demon_Felguard"] = false,
 	["ConROC_Caster_Armor_DemonArmor"] = true,
-	["ConROC_Caster_Curse_Weakness"] = true,
+	["ConROC_Caster_Armor_FelArmor"] = false,
+	["ConROC_Caster_Curse_Weakness"] = false,
+	["ConROC_Caster_Curse_Agony"] = true,
+	["ConROC_Caster_Curse_Recklessness"] = false,
+	["ConROC_Caster_Curse_Tongues"] = false,
+	["ConROC_Caster_Curse_Exhaustion"] = false,
+	["ConROC_Caster_Curse_Elements"] = false,
+	["ConROC_Caster_Curse_Shadow"] = false,
+	["ConROC_Caster_Curse_Doom"] = false,
+	["ConROC_Caster_Curse_None"] = false,
 	["ConROC_Caster_Debuff_Immolate"] = true,
+	["ConROC_Caster_Debuff_UnstableAffliction"] = false,
+	["ConROC_Caster_Debuff_Shadowflame"] = false,
 	["ConROC_Caster_Debuff_Corruption"] = true,
 	["ConROC_Caster_Debuff_SiphonLife"] = true,
 	["ConROC_Caster_Filler_ShadowBolt"] = true,
+	["ConROC_Caster_Filler_Incinerate"] = false,
+	["ConROC_Caster_Filler_SearingPain"] = false,
+	["ConROC_Caster_Mana_LifeTap"] = false,
+	["ConROC_Caster_Mana_DrainMana"] = false,
+	["ConROC_Caster_AoE_RainofFire"] = true,
+	["ConROC_Caster_AoE_Hellfire"] = true,
 	["ConROC_Caster_Option_SoulShard"] = 5,
 	["ConROC_Caster_Option_AoE"] = false,
-	["ConROC_Caster_Option_UseWand"] = true,
+	["ConROC_Caster_Option_UseWand"] = false,
 
+	["ConROC_PvP_Demon_Imp"] = true,
+	["ConROC_PvP_Demon_Voidwalker"] = false,
+	["ConROC_PvP_Demon_Incubus"] = false,
+	["ConROC_PvP_Demon_Succubus"] = false,
+	["ConROC_PvP_Demon_Felhunter"] = false,
+	["ConROC_PvP_Demon_Felguard"] = false,
+	["ConROC_PvP_Armor_DemonArmor"] = true,
+	["ConROC_PvP_Armor_FelArmor"] = false,
+	["ConROC_PvP_Curse_Weakness"] = false,
+	["ConROC_PvP_Curse_Agony"] = true,
+	["ConROC_PvP_Curse_Recklessness"] = false,
+	["ConROC_PvP_Curse_Tongues"] = false,
+	["ConROC_PvP_Curse_Exhaustion"] = false,
+	["ConROC_PvP_Curse_Elements"] = false,
+	["ConROC_PvP_Curse_Shadow"] = false,
+	["ConROC_PvP_Curse_Doom"] = false,
+	["ConROC_PvP_Curse_None"] = false,
+	["ConROC_PvP_Debuff_Immolate"] = true,
+	["ConROC_PvP_Debuff_UnstableAffliction"] = false,
+	["ConROC_PvP_Debuff_Shadowflame"] = false,
+	["ConROC_PvP_Debuff_Corruption"] = true,
+	["ConROC_PvP_Debuff_SiphonLife"] = true,
+	["ConROC_PvP_Filler_ShadowBolt"] = true,
+	["ConROC_PvP_Filler_Incinerate"] = false,
+	["ConROC_PvP_Filler_SearingPain"] = false,
+	["ConROC_PvP_Mana_LifeTap"] = false,
+	["ConROC_PvP_Mana_DrainMana"] = false,
+	["ConROC_PvP_AoE_RainofFire"] = true,
+	["ConROC_PvP_AoE_Hellfire"] = true,
 	["ConROC_PvP_Option_SoulShard"] = 5,
+	["ConROC_PvP_Option_AoE"] = false,
+	["ConROC_PvP_Option_UseWand"] = false,
 }
 
 ConROCWarlockSpells = ConROCWarlockSpells or defaults;
@@ -105,8 +159,9 @@ local function CheckScrollbarVisibility()
     end
 end
 
-function ConROC:SpellmenuClass()
-	ConROC:UpdateSpellID();
+function ConROC:RotationChoices()
+    ConROC:UpdateSpellID();
+
 	ConROC_RoleSettingsTable = {
 		{
 		frameName = "Caster",
@@ -125,13 +180,13 @@ function ConROC:SpellmenuClass()
 		{
 			frameName = "Demons",
 			spells = {
-			{spellID = ids.Ability.SummonImp, spellCheckbox = "Demon_Imp", reqLevel = 1, type="spell"},
-			{spellID = ids.Ability.SummonVoidwalker, spellCheckbox = "Demon_Voidwalker", reqLevel = 10, type="spell"},
-			{spellID = ids.Ability.SummonIncubus, spellCheckbox = "Demon_Incubus", reqLevel = 20, type="spell"},
-			{spellID = ids.Ability.SummonSuccubus, spellCheckbox = "Demon_Succubus", reqLevel = 20, type="spell"},
-			{spellID = ids.Ability.SummonFelhunter, spellCheckbox = "Demon_Felhunter", reqLevel = 30, type="spell"},
-			{spellID = ids.Runes.SummonFelguard, spellCheckbox = "Demon_Felguard", reqLevel = 1, type="spell"},
-			{spellID = "None", spellCheckbox = "Demon_None", reqLevel = 1, type="none"}
+				{spellID = ids.Ability.SummonImp, spellCheckbox = "Demon_Imp", reqLevel = 1, type="spell"},
+				{spellID = ids.Ability.SummonVoidwalker, spellCheckbox = "Demon_Voidwalker", reqLevel = 10, type="spell"},
+				{spellID = ids.Ability.SummonIncubus, spellCheckbox = "Demon_Incubus", reqLevel = 20, type="spell"},
+				{spellID = ids.Ability.SummonSuccubus, spellCheckbox = "Demon_Succubus", reqLevel = 20, type="spell"},
+				{spellID = ids.Ability.SummonFelhunter, spellCheckbox = "Demon_Felhunter", reqLevel = 30, type="spell"},
+				{spellID = ids.Runes.SummonFelguard, spellCheckbox = "Demon_Felguard", reqLevel = 1, type="spell"},
+				{spellID = "None", spellCheckbox = "Demon_None", reqLevel = 1, type="none"}
 			},
 			groupType = "radioButtons"
 	  	},
@@ -146,15 +201,15 @@ function ConROC:SpellmenuClass()
 		{
 			frameName = "Curses",
 			spells = {
-			{spellID = ids.Ability.CurseofWeakness, spellCheckbox = "Curse_Weakness", reqLevel = 4, type="spell"},
-			{spellID = ids.Ability.CurseofAgony, spellCheckbox = "Curse_Agony", reqLevel = 8, type="spell"},
-			{spellID = ids.Ability.CurseofRecklessness, spellCheckbox = "Curse_Recklessness", reqLevel = 8, type="spell"},
-			{spellID = ids.Ability.CurseofTongues, spellCheckbox = "Curse_Tongues", reqLevel = 26, type="spell"},
-			{spellID = ids.Ability.CurseofExhaustion, spellCheckbox = "Curse_Exhaustion", reqLevel = 30, type="spell"},
-			{spellID = ids.Ability.CurseoftheElements, spellCheckbox = "Curse_Elements", reqLevel = 32, type="spell"},
-			{spellID = ids.Ability.CurseofShadow, spellCheckbox = "Curse_Shadow", reqLevel = 32, type="spell"},
-			{spellID = ids.Ability.CurseofDoom, spellCheckbox = "Curse_Doom", reqLevel = 60, type="spell"},
-			{spellID = "None", spellCheckbox = "Curse_None", reqLevel = 1, type="none"}
+				{spellID = ids.Ability.CurseofWeakness, spellCheckbox = "Curse_Weakness", reqLevel = 4, type="spell"},
+				{spellID = ids.Ability.CurseofAgony, spellCheckbox = "Curse_Agony", reqLevel = 8, type="spell"},
+				{spellID = ids.Ability.CurseofRecklessness, spellCheckbox = "Curse_Recklessness", reqLevel = 8, type="spell"},
+				{spellID = ids.Ability.CurseofTongues, spellCheckbox = "Curse_Tongues", reqLevel = 26, type="spell"},
+				{spellID = ids.Ability.CurseofExhaustion, spellCheckbox = "Curse_Exhaustion", reqLevel = 30, type="spell"},
+				{spellID = ids.Ability.CurseoftheElements, spellCheckbox = "Curse_Elements", reqLevel = 32, type="spell"},
+				{spellID = ids.Ability.CurseofShadow, spellCheckbox = "Curse_Shadow", reqLevel = 32, type="spell"},
+				{spellID = ids.Ability.CurseofDoom, spellCheckbox = "Curse_Doom", reqLevel = 60, type="spell"},
+				{spellID = "None", spellCheckbox = "Curse_None", reqLevel = 1, type="none"}
 			},
 			groupType = "radioButtons"
 		},
@@ -166,7 +221,6 @@ function ConROC:SpellmenuClass()
 				{spellID = ids.Runes.Shadowflame, spellCheckbox = "Debuff_Shadowflame", reqLevel = 1, type = "spell"},
 				{spellID = ids.Ability.Corruption, spellCheckbox = "Debuff_Corruption", reqLevel = 4, type = "spell"},
 				{spellID = ids.Ability.SiphonLife, spellCheckbox = "Debuff_SiphonLife", reqLevel = 30, type = "spell"},
-				{spellID = ids.Ability.SoulFire, spellCheckbox = "Debuff_SoulFire", reqLevel = 48, type = "spell"},
 			},
 			groupType = "checkBoxes"
 		},
@@ -201,12 +255,15 @@ function ConROC:SpellmenuClass()
 				--{spellID = ids.Runes.Metamorphosis, spellCheckbox = "Option_Metamorphosis", reqLevel = 60, type="spell"},
 				{spellID = ids.Ability.DrainSoul, spellCheckbox = "Option_SoulShard", reqLevel = 10, type = "textfield", icon = 6265, customName = "Minimum Soul Shards"},
 				--{spellID = "Use Prepull actions", spellCheckbox = "Option_PrePull", reqLevel = 15, type="custom", icon=237511, customName="Use Prepull actions"},
-				{spellID = "AoE Detect", spellCheckbox = "Option_AoE", reqLevel = 20, type = "custom", icon = ids.Ability.RainofFire, customName = "AoE Detect"},
-				--{spellID = "AoE Toggle Button", spellCheckbox = "Option_AoE", reqLevel = 20, type = "aoetoggler"},
+				{spellID = "AoE Toggle Button", spellCheckbox = "Option_AoE", reqLevel = 20, type = "aoetoggler"},
 				{spellID = "Use Wand", spellCheckbox = "Option_UseWand", reqLevel = 5, type = "wand"}
 			}
 	  	}
 	}
+end
+
+function ConROC:SpellmenuClass()
+	ConROC:RotationChoices();
 
 	local _, Class, classId = UnitClass("player")
 	local Color = RAID_CLASS_COLORS[Class]
@@ -572,6 +629,7 @@ function ConROC:OptionRadioButtonSpell(_spellData, i, j, _spellFrame, _radioButt
 	lastFrame:Show();
 	--spell end
 end
+
 function ConROC:OptionWand(_spellData, i, j, _spellFrame)
 	local myFrame = "ConROC_SM_".._spellData.spellCheckbox
 	local oItem = CreateFrame("CheckButton", myFrame, _spellFrame, "UICheckButtonTemplate");
@@ -715,6 +773,7 @@ function ConROC:CustomOption(_spellData, i, j, _spellFrame)
 	spellFrameHeight = spellFrameHeight + math.ceil(lastFrame:GetHeight());
 	lastFrame:Show();
 end
+
 function ConROC:OptionAoE(_spellData, i, j, _spellFrame)
 	local myFrame = "ConROC_SM_".._spellData.spellCheckbox
 	local oItem = CreateFrame("CheckButton", myFrame, _spellFrame, "UICheckButtonTemplate");
@@ -816,8 +875,9 @@ function ConROC:OptionNone(_spellData, i, j, _spellFrame, _checkType, _radioButt
     lastFrame:Show();
 end
 
-function ConROC:SpellMenuUpdate(newSpell)
-	ConROC:UpdateSpellID();
+function ConROC:SpellMenuUpdate()
+	ConROC:RotationChoices();
+
     lastFrame = ConROCScrollChild;
     local anyHLVisible = false;
     scrollHeight = 0;
@@ -871,9 +931,6 @@ function ConROC:SpellMenuUpdate(newSpell)
                             oItem:Hide()
                             --print("Hide spell", spellName)
                         end
-                    else
-                        --scrollHeight = scrollHeight + math.ceil(lFrame:GetHeight());
-                        --spellFrameHeight = spellFrameHeight + math.ceil(oItem:GetHeight());
                     end
                 --spell end
                 elseif _spellData.type == "poison" then
@@ -1069,9 +1126,6 @@ function ConROC:SpellMenuUpdate(newSpell)
         ConROCScrollContainer:Show();
         ConROCScrollChild:Show();
     end
-	if newSpell then
-		ConROC:closeSpellmenu();
-	end
 end
 
 function flashMessage()
