@@ -410,7 +410,8 @@ function ConROC:UpdateSpellID()
 		elseif IsSpellKnown(ids.Rank.DrainLifeRank5) then ids.Ability.DrainLife = ids.Rank.DrainLifeRank5;
 		elseif IsSpellKnown(ids.Rank.DrainLifeRank4) then ids.Ability.DrainLife = ids.Rank.DrainLifeRank4;
 		elseif IsSpellKnown(ids.Rank.DrainLifeRank3) then ids.Ability.DrainLife = ids.Rank.DrainLifeRank3;
-		elseif IsSpellKnown(ids.Rank.DrainLifeRank2) then ids.Ability.DrainLife = ids.Rank.DrainLifeRank2; end
+		elseif IsSpellKnown(ids.Rank.DrainLifeRank2) then ids.Ability.DrainLife = ids.Rank.DrainLifeRank2;
+		elseif IsSpellKnown(ids.Rank.DrainLifeRank1) then ids.Ability.DrainLife = ids.Rank.DrainLifeRank1; end
 	end
 
 	if IsSpellKnown(ids.Rank.DrainManaRank4) then ids.Ability.DrainMana = ids.Rank.DrainManaRank4;
@@ -504,7 +505,8 @@ function ConROC:UpdateSpellID()
 	else
 		if IsSpellKnown(ids.Rank.RainofFireRank4) then ids.Ability.RainofFire = ids.Rank.RainofFireRank4;
 		elseif IsSpellKnown(ids.Rank.RainofFireRank3) then ids.Ability.RainofFire = ids.Rank.RainofFireRank3;
-		elseif IsSpellKnown(ids.Rank.RainofFireRank2) then ids.Ability.RainofFire = ids.Rank.RainofFireRank2; end
+		elseif IsSpellKnown(ids.Rank.RainofFireRank2) then ids.Ability.RainofFire = ids.Rank.RainofFireRank2;
+		elseif IsSpellKnown(ids.Rank.RainofFireRank1) then ids.Ability.RainofFire = ids.Rank.RainofFireRank1; end
 	end
 
 	if IsSpellKnown(ids.Rank.SearingPainRank6) then ids.Ability.SearingPain = ids.Rank.SearingPainRank6;
